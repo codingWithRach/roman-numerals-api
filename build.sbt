@@ -1,4 +1,4 @@
-name := """book-manager-api"""
+name := """api-project"""
 organization := "com.techreturners"
 
 version := "1.0-SNAPSHOT"
