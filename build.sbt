@@ -1,4 +1,4 @@
-name := """api-project"""
+name := """roman-numerals-api"""
 organization := "com.techreturners"
 
 version := "1.0-SNAPSHOT"
