@@ -9,7 +9,16 @@ class RomansRepository {
 
 
   def convertToRoman( arabic: Int ): Conversion = {
-    Conversion(arabic, "I")
+    val arabics: Seq[Int] = romans.keys.toSeq.sortWith( _ > _ )
+    var workingNum: Int = arabic
+    var roman = ""
+    for ( arabicNum <- arabics ) {
+      while (workingNum >= arabicNum) {
+        workingNum -= arabicNum
+        roman += romans(arabicNum)
+      }
+    }
+    Conversion(arabic, roman)
   }
 
   def convertToArabic( roman: String ): Conversion = {
