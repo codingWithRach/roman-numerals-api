@@ -23,8 +23,6 @@ To be completed
 
 Run the application from run menu in the top right corner of IntelliJ by clicking the green play button.
 
-![IntelliJ Run Task](docs/images/intellij_run_button.png "IntelliJ run application")
-
 Once the application is running you can explore the API such as:
 
 http://localhost:9000/TO_BE_COMPLETED
