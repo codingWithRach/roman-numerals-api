@@ -23,9 +23,13 @@ class RomansRepositorySpec extends AnyFlatSpec with Matchers {
 
   "convertToArabic" should "convert the specified Roman numerals to the correct arabic number" in {
     dataRepository.convertToArabic("IV") should be (Conversion(4, "IV"))
-//    dataRepository.convertToArabic("VIII") should be (Conversion(8, "VIII"))
-//    dataRepository.convertToArabic("XXVII") should be (Conversion(27, "XXVII"))
-//    dataRepository.convertToArabic("MCMLXXII") should be (Conversion(1972, "MCMLXXII"))
+    dataRepository.convertToArabic("VIII") should be (Conversion(8, "VIII"))
+    dataRepository.convertToArabic("XXVII") should be (Conversion(27, "XXVII"))
+    dataRepository.convertToArabic("MCMLXXII") should be (Conversion(1972, "MCMLXXII"))
+  }
+
+  "convertToArabic" should "correctly convert lowercase Roman numerals" in {
+    dataRepository.convertToArabic("iii") should be (Conversion(3, "III"))
   }
 
   it should "return an empty conversion if passed an invalid Roman numeral" in {

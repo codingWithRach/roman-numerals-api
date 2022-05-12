@@ -37,8 +37,9 @@ class RomansRepository {
   }
 
   def convertToArabic( roman: String ): Conversion = {
-    if (!(roman matches "^[IVXLCDM]*$")) return emptyConversion
-    var workingRoman: String = roman
+    val uppercaseRoman = roman.toUpperCase
+    if (!(uppercaseRoman matches "^[IVXLCDM]*$")) return emptyConversion
+    var workingRoman: String = uppercaseRoman
     var arabic = 0
     val romanChars: Seq[String] = sortedArabics.map(arabic => romans(arabic))
     for (romanChar <- romanChars) {
@@ -47,6 +48,6 @@ class RomansRepository {
         workingRoman = workingRoman.substring( romanChar.length )
       }
     }
-    Conversion(arabic, roman)
+    Conversion(arabic, uppercaseRoman)
   }
 }
