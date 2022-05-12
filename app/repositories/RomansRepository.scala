@@ -1,6 +1,7 @@
 package repositories
 
 import models.Conversion
+
 import javax.inject.Singleton
 
 @Singleton
@@ -20,8 +21,10 @@ class RomansRepository {
     900 -> "CM",
     1000 -> "M")
   private val sortedArabics: Seq[Int] = romans.keys.toSeq.sortWith( _ > _ )
+  private val emptyConversion: Conversion = Conversion(0, "")
 
   def convertToRoman( arabic: Int ): Conversion = {
+    if (arabic <= 0) return emptyConversion
     var workingNum: Int = arabic
     var roman = ""
     for ( arabicNum <- sortedArabics ) {
@@ -34,6 +37,7 @@ class RomansRepository {
   }
 
   def convertToArabic( roman: String ): Conversion = {
+    if (!(roman matches "^[IVXLCDM]*$")) return emptyConversion
     var workingRoman: String = roman
     var arabic = 0
     val romanChars: Seq[String] = sortedArabics.map(arabic => romans(arabic))
