@@ -3,6 +3,7 @@ package repositories
 import models.Conversion
 
 import javax.inject.Singleton
+import scala.collection.mutable
 
 @Singleton
 class RomansRepository {
@@ -22,6 +23,7 @@ class RomansRepository {
     1000 -> "M")
   private val sortedArabics: Seq[Int] = romans.keys.toSeq.sortWith( _ > _ )
   private val emptyConversion: Conversion = Conversion(0, "")
+  val newRomans: mutable.Set[Conversion] = mutable.Set[Conversion]()
 
   def convertToRoman( arabic: Int ): Conversion = {
     if (arabic <= 0) return emptyConversion
@@ -49,5 +51,15 @@ class RomansRepository {
       }
     }
     Conversion(arabic, uppercaseRoman)
+  }
+
+  def addRoman( newRoman: Conversion): Option[Conversion] = {
+    if( newRomans.exists( r => r.roman == newRoman.roman)) {
+      None
+    } else {
+      newRomans.addOne(newRoman).collectFirst {
+        case r if r.roman == newRoman.roman => r
+      }
+    }
   }
 }

@@ -64,6 +64,32 @@ Both methods return a response with content type **application/json** in the fol
         "roman": "XLII"
     }
 
+## Adding a new Roman
+
+In addition to converting numbers, you may wish to use this API to store information about famous Romans, such as the year Caesar died.
+
+The names of such Romans cannot be duplicated.
+
+### POST
+
+    /addroman
+
+Expects to receive a request body with content type **application/json** in the following form:
+
+    {
+        "roman": "Caesar"
+        "arabic": 150344
+    }
+
+### Response
+
+If successful, a response is returned with content type **application/json** containing details of the added Roman:
+
+    {
+        "roman": "Caesar"
+        "arabic": 150344
+    }
+
 ## Tech Stack
 
 This project was built using the Scala [Play Framework](https://www.playframework.com/) with [Google Guice](https://github.com/google/guice) for dependency injection.

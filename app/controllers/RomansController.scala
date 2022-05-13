@@ -50,4 +50,19 @@ class RomansController  @Inject()(val controllerComponents: ControllerComponents
       }
     }
 
+  def addRoman(): Action[AnyContent] = Action {
+    implicit request => {
+      val newRoman: Option[Conversion] = request.body.asJson.flatMap(Json.fromJson[Conversion](_).asOpt)
+      if (newRoman.isEmpty) {
+        BadRequest(Json.toJson("Request body not in required format"))
+      } else {
+        val savedRoman: Option[Conversion] = dataRepository.addRoman(newRoman.get)
+        if (savedRoman.isEmpty) {
+          BadRequest(Json.toJson("Roman already exists"))
+        } else {
+          Created(Json.toJson(savedRoman))
+        }
+      }
+    }
+  }
 }

@@ -1,6 +1,6 @@
 package repositories
 
-import models.Conversion
+import models.{Conversion, Roman}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -45,6 +45,19 @@ class RomansRepositorySpec extends AnyFlatSpec with Matchers {
   "convertToArabic followed by convertToRoman" should "result in the original Roman numeral" in {
     val conversion: Conversion = dataRepository.convertToArabic("XII")
     dataRepository.convertToRoman(conversion.arabic) should be (conversion)
+  }
+
+  "addRoman" should "save details of a new Roman in valid format" in {
+    val newRoman: Conversion = Conversion(roman="Caesar", arabic=150344)
+    dataRepository.addRoman(newRoman) should be (Some(newRoman))
+    dataRepository.newRomans.head should be (newRoman)
+  }
+
+ it should "fail to save details of a duplicate new Roman" in {
+    val newRoman: Conversion = Conversion(roman="Caesar", arabic=150344)
+    dataRepository.addRoman(newRoman)
+    dataRepository.addRoman(newRoman) should be (None)
+    dataRepository.newRomans.size should be (1)
   }
 
 }

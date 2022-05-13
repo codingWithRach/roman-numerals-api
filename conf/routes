@@ -13,4 +13,5 @@ GET     /toroman/:arabic              controllers.RomansController.convertToRoma
 GET     /toarabic/:roman              controllers.RomansController.convertToArabic(roman: String)
 POST    /toroman                      controllers.RomansController.convertBodyToRoman()
 POST    /toarabic                     controllers.RomansController.convertBodyToArabic()
+POST    /addroman                     controllers.RomansController.addRoman()
 

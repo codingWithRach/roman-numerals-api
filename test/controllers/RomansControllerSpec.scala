@@ -8,6 +8,7 @@ import play.api.test.Helpers._
 import repositories.RomansRepository
 import models.{Arabic, Conversion, Roman}
 import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.any
 import play.api.libs.json.Json
 
 class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Injecting with MockitoSugar {
@@ -148,6 +149,38 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
   it should {
     "return 400 BAD_REQUEST for a request with a body in an invalid format" in {
       val result = controller.convertBodyToArabic().apply(FakeRequest(POST, "/toarabic").withJsonBody(Json.toJson(Arabic(42))))
+      status(result) mustBe BAD_REQUEST
+      contentType(result) mustBe Some("application/json")
+      assert(contentAsString(result).contains ("Request body not in required format"))
+    }
+  }
+
+  "RomansController POST addRoman" should {
+    "return 201 CREATED for a request to add a new Roman in valid format" in {
+      val newRoman: Conversion = Conversion(roman="Caesar", arabic=150344)
+      when(mockDataService.addRoman(any())) thenReturn Some(newRoman)
+      val result = controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(newRoman)))
+      status(result) mustBe CREATED
+      contentType(result) mustBe Some("application/json")
+    }
+  }
+
+  it should {
+    "return 400 BAD_REQUEST for a request to add a new Roman who already exists" in {
+      val newRoman: Conversion = Conversion(roman="Caesar", arabic=150344)
+      when(mockDataService.addRoman(any())) thenReturn None
+      controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(newRoman)))
+      val result = controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(newRoman)))
+      status(result) mustBe BAD_REQUEST
+      contentType(result) mustBe Some("application/json")
+      assert(contentAsString(result).contains ("Roman already exists"))
+    }
+  }
+
+  it should {
+    "return 400 BAD_REQUEST for a request to add a new Roman in invalid format" in {
+      val newRoman: Roman = Roman("Caesar")
+      val result = controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(newRoman)))
       status(result) mustBe BAD_REQUEST
       contentType(result) mustBe Some("application/json")
       assert(contentAsString(result).contains ("Request body not in required format"))
