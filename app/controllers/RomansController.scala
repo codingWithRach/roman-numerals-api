@@ -13,11 +13,11 @@ class RomansController  @Inject()(val controllerComponents: ControllerComponents
 
   def convertToRoman(arabic: Int): Action[AnyContent] = Action {
     val conversion: Conversion = dataRepository.convertToRoman(arabic)
-    val resultAsJson = checkConversion(conversion, "Number cannot be converted into Roman numerals")
+    val response = checkConversion(conversion, "Number cannot be converted into Roman numerals")
     if (conversion == emptyConversion)
-      BadRequest(resultAsJson)
+      BadRequest(response)
     else {
-      Ok(resultAsJson)
+      Ok(response)
     }
   }
 
@@ -33,11 +33,11 @@ class RomansController  @Inject()(val controllerComponents: ControllerComponents
         BadRequest(Json.toJson("Request body not in required format"))
       } else {
         val conversion: Conversion = dataRepository.convertToRoman(arabic.get.arabic)
-        val resultAsJson = checkConversion(conversion, "Number cannot be converted into Roman numerals")
+        val response = checkConversion(conversion, "Number cannot be converted into Roman numerals")
         if (conversion == emptyConversion)
-          BadRequest(resultAsJson)
+          BadRequest(response)
         else {
-          Ok(resultAsJson)
+          Ok(response)
         }
       }
     }
@@ -45,11 +45,11 @@ class RomansController  @Inject()(val controllerComponents: ControllerComponents
 
   def convertToArabic(roman: String): Action[AnyContent] = Action {
     val conversion: Conversion = dataRepository.convertToArabic(roman)
-    val resultAsJson = checkConversion(conversion, "Not a valid Roman numeral")
+    val response = checkConversion(conversion, "Not a valid Roman numeral")
     if (conversion == emptyConversion)
-      BadRequest(resultAsJson)
+      BadRequest(response)
     else {
-      Ok(resultAsJson)
+      Ok(response)
     }
   }
 
@@ -65,11 +65,11 @@ class RomansController  @Inject()(val controllerComponents: ControllerComponents
         BadRequest(Json.toJson("Request body not in required format"))
       } else {
         val conversion: Conversion = dataRepository.convertToArabic(roman.get.roman)
-        val resultAsJson = checkConversion(conversion, "Not a valid Roman numeral")
+        val response = checkConversion(conversion, "Not a valid Roman numeral")
         if (conversion == emptyConversion)
-          BadRequest(resultAsJson)
+          BadRequest(response)
         else {
-          Ok(resultAsJson)
+          Ok(response)
         }
       }
     }
