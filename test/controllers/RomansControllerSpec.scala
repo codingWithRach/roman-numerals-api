@@ -94,6 +94,17 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
     }
   }
 
+  it should {
+    "return 400 BAD_REQUEST for a request with a body in an invalid format" in {
+      val controller = new RomansController(stubControllerComponents(), mockDataService)
+      val result = controller.convertBodyToRoman().apply(FakeRequest(POST, "/toroman").withJsonBody(Json.toJson(Roman("LXII"))))
+
+      status(result) mustBe BAD_REQUEST
+      contentType(result) mustBe Some("application/json")
+      assert(contentAsString(result).contains ("Request body not in required format"))
+    }
+  }
+
   "RomansController GET convertToArabic" should {
     "return 200 OK for a request to convert valid Roman numerals" in {
       when(mockDataService.convertToArabic(romanFor6)) thenReturn conversionOf6
@@ -169,6 +180,17 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
       status(result) mustBe BAD_REQUEST
       contentType(result) mustBe Some("application/json")
       assert(contentAsString(result).contains ("Not a valid Roman numeral"))
+    }
+  }
+
+  it should {
+    "return 400 BAD_REQUEST for a request with a body in an invalid format" in {
+      val controller = new RomansController(stubControllerComponents(), mockDataService)
+      val result = controller.convertBodyToArabic().apply(FakeRequest(POST, "/toarabic").withJsonBody(Json.toJson(Arabic(42))))
+
+      status(result) mustBe BAD_REQUEST
+      contentType(result) mustBe Some("application/json")
+      assert(contentAsString(result).contains ("Request body not in required format"))
     }
   }
 }
