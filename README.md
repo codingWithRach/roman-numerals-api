@@ -1,39 +1,69 @@
-# API Project
+# Roman Numerals API
 
-## Introduction
+A RESTful API to convert numbers between Arabic and Roman
 
-To be completed
+## Getting Started
 
-## Pre-Requisites
+This API is not currently hosted.
 
-- Java SE Development Kit 11 
-- Scala version 2 (Tested with v2.13.8)
-- sbt (Tested with v1.6.2)
+In order to use it, clone this repository to your computer.
 
-## Technologies & Dependencies
+Navigate to the project folder and enter the following command in the terminal
 
-- Scala [Play Framework](https://www.playframework.com/)
-- [Google Guice](https://github.com/google/guice) for dependency injection 
+    sbt run
 
-## How to Get Started
+The API will be accessible at http://localhost:9000/{endpoint}
 
-To be completed
+## Converting from Arabic to Roman Numerals
 
-### Running the application from IntelliJ
+### GET
 
-Run the application from run menu in the top right corner of IntelliJ by clicking the green play button.
+    /toroman/{arabic number}
 
-Once the application is running you can explore the API such as:
+### POST
 
-http://localhost:9000/TO_BE_COMPLETED
+    /toroman
 
-### Running the application from command line
+Expects to receive a request body with content type **application/json** in the following form:
 
-Alternatively if you prefer to run the application by the command line, you can navigate to the root of the project and run:
+    {
+        "arabic": 42
+    }
 
-`sbt run`
+### Response
 
-### Stopping the application
+Both methods return a response with content type **application/json** in the following form:
 
-To stop the application click the small red **Stop button** towards the bottom left hand corner of IntelliJ or if you are running from command line you can do **Ctrl+C**
+    {
+        "arabic": 42,
+        "roman": "XLII"
+    }
 
+## Converting from Roman Numerals to Arabic
+
+### GET
+
+    /toarabic/{roman numeral}
+
+### POST
+
+    /toarabic
+
+Expects to receive a request body with content type **application/json** in the following form:
+
+    {
+        "roman": "XLII"
+    }
+
+### Response
+
+Both methods return a response with content type **application/json** in the following form:
+
+    {
+        "arabic": 42,
+        "roman": "XLII"
+    }
+
+## Tech Stack
+
+This project was built using the Scala [Play Framework](https://www.playframework.com/) with [Google Guice](https://github.com/google/guice) for dependency injection.
