@@ -29,12 +29,16 @@ class RomansController  @Inject()(val controllerComponents: ControllerComponents
         arabicAsJson.flatMap(
           Json.fromJson[Arabic](_).asOpt
         )
-      val conversion: Conversion = dataRepository.convertToRoman(arabic.get.arabic)
-      val resultAsJson = checkConversion(conversion, "Number cannot be converted into Roman numerals")
-      if (conversion == emptyConversion)
-        BadRequest(resultAsJson)
-      else {
-        Ok(resultAsJson)
+      if (arabic.isEmpty) {
+        BadRequest(Json.toJson("Request body not in required format"))
+      } else {
+        val conversion: Conversion = dataRepository.convertToRoman(arabic.get.arabic)
+        val resultAsJson = checkConversion(conversion, "Number cannot be converted into Roman numerals")
+        if (conversion == emptyConversion)
+          BadRequest(resultAsJson)
+        else {
+          Ok(resultAsJson)
+        }
       }
     }
   }
@@ -57,12 +61,16 @@ class RomansController  @Inject()(val controllerComponents: ControllerComponents
         romanAsJson.flatMap(
           Json.fromJson[Roman](_).asOpt
         )
-      val conversion: Conversion = dataRepository.convertToArabic(roman.get.roman)
-      val resultAsJson = checkConversion(conversion, "Not a valid Roman numeral")
-      if (conversion == emptyConversion)
-        BadRequest(resultAsJson)
-      else {
-        Ok(resultAsJson)
+      if (roman.isEmpty) {
+        BadRequest(Json.toJson("Request body not in required format"))
+      } else {
+        val conversion: Conversion = dataRepository.convertToArabic(roman.get.roman)
+        val resultAsJson = checkConversion(conversion, "Not a valid Roman numeral")
+        if (conversion == emptyConversion)
+          BadRequest(resultAsJson)
+        else {
+          Ok(resultAsJson)
+        }
       }
     }
   }
