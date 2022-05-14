@@ -74,4 +74,29 @@ class RomansController  @Inject()(val controllerComponents: ControllerComponents
       Ok(Json.toJson(romans))
     }
   }
+
+  def deleteRoman(roman: String): Action[AnyContent] = Action {
+    val deletedRoman: Option[Conversion] = dataRepository.deleteRoman(Roman(roman))
+    if (deletedRoman.isEmpty) {
+      BadRequest(Json.toJson("Roman cannot be found"))
+    } else {
+      Ok(Json.toJson(deletedRoman))
+    }
+  }
+
+  def deleteRomanBody(): Action[AnyContent] = Action {
+    implicit request => {
+      val romanToDelete: Option[Roman] = request.body.asJson.flatMap(Json.fromJson[Roman](_).asOpt)
+      if (romanToDelete.isEmpty) {
+        BadRequest(Json.toJson("Request body not in required format"))
+      } else {
+        val deletedRoman: Option[Conversion] = dataRepository.deleteRoman(romanToDelete.get)
+        if (deletedRoman.isEmpty) {
+          BadRequest(Json.toJson("Roman cannot be found"))
+        } else {
+          Ok(Json.toJson(deletedRoman))
+        }
+      }
+    }
+  }
 }

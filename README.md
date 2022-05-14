@@ -111,6 +111,31 @@ A response is returned with content type **application/json** containing details
         }
     ]
 
+## Deleting an added Roman
+
+### DELETE (via the endpoint)
+
+    /deleteroman/{name of Roman}
+
+### DELETE (via request body)
+
+    /deleteroman
+
+Expects to receive a request body with content type **application/json** in the following form:
+
+    {
+        "roman": "Caesar"
+    }
+
+### Response
+
+If successful, both methods return a response with content type **application/json** containing details of the deleted Roman:
+
+    {
+        "arabic": 150344,
+        "roman": "Caesar"
+    }
+
 ## Tech Stack
 
 This project was built using the Scala [Play Framework](https://www.playframework.com/) with [Google Guice](https://github.com/google/guice) for dependency injection.

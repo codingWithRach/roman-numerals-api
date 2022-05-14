@@ -75,4 +75,21 @@ class RomansRepositorySpec extends AnyFlatSpec with Matchers {
     dataRepository.getRomans.size should be (2)
   }
 
+  "deleteRoman" should "return the deleted Roman when attempting to delete a Roman that exists" in {
+    val dataRepository = new RomansRepository
+    val caesar: Conversion = Conversion(roman="Caesar", arabic=150344)
+    dataRepository.addRoman(caesar)
+    val romanDeleted = dataRepository.deleteRoman(Roman(caesar.roman))
+    dataRepository.newRomans.size should be (0)
+    romanDeleted should be (Some(caesar))
+  }
+
+  it should "return None when attempting to delete a Roman that does not exist" in {
+    val dataRepository = new RomansRepository
+    val caesar: Conversion = Conversion(roman="Caesar", arabic=150344)
+    val romanDeleted = dataRepository.deleteRoman(Roman(caesar.roman))
+    dataRepository.newRomans.size should be (0)
+    romanDeleted should be (None)
+  }
+
 }

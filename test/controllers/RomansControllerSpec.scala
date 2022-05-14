@@ -209,4 +209,56 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
       assert(contentAsString(result).contains ("No Romans defined"))
     }
   }
+
+  "RomansController DELETE deleteRoman" should {
+    "return 200 OK for a request to delete a Roman that has been added" in {
+      val caesar: Conversion = Conversion(roman="Caesar", arabic=150344)
+      when(mockDataService.deleteRoman(any())) thenReturn Some(caesar)
+      controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(caesar)))
+      val result = controller.deleteRoman(caesar.roman).apply(FakeRequest(DELETE, "/deleteroman/Caesar"))
+      status(result) mustBe OK
+      contentType(result) mustBe Some("application/json")
+    }
+  }
+
+  it should {
+    "return 400 BAD_REQUEST for a request to delete a Roman that has not been added" in {
+      when(mockDataService.deleteRoman(any())) thenReturn None
+      val result = controller.deleteRoman("Caesar").apply(FakeRequest(DELETE, "/deleteroman/Caesar"))
+      status(result) mustBe BAD_REQUEST
+      contentType(result) mustBe Some("application/json")
+      assert(contentAsString(result).contains ("Roman cannot be found"))
+    }
+  }
+
+  "RomansController DELETE deleteRomanBody" should {
+    "return 200 OK for a request to delete a Roman that has been added" in {
+      val caesar: Conversion = Conversion(roman="Caesar", arabic=150344)
+      when(mockDataService.deleteRoman(any())) thenReturn Some(caesar)
+      controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(caesar)))
+      val result = controller.deleteRomanBody().apply(FakeRequest(DELETE, "/deleteroman").withJsonBody(Json.toJson(Roman(caesar.roman))))
+      status(result) mustBe OK
+      contentType(result) mustBe Some("application/json")
+    }
+  }
+
+  it should {
+    "return 400 BAD_REQUEST for a request to delete a Roman that has not been added" in {
+      when(mockDataService.deleteRoman(any())) thenReturn None
+      val result = controller.deleteRomanBody().apply(FakeRequest(DELETE, "/deleteroman").withJsonBody(Json.toJson(Roman("Caesar"))))
+      status(result) mustBe BAD_REQUEST
+      contentType(result) mustBe Some("application/json")
+      assert(contentAsString(result).contains ("Roman cannot be found"))
+    }
+  }
+
+  it should {
+    "return 400 BAD_REQUEST for a request to delete a Roman in invalid format" in {
+      val invalidRoman: Arabic = Arabic(150344)
+      val result = controller.deleteRomanBody().apply(FakeRequest(DELETE, "/deleteRoman").withJsonBody(Json.toJson(invalidRoman)))
+      status(result) mustBe BAD_REQUEST
+      contentType(result) mustBe Some("application/json")
+      assert(contentAsString(result).contains ("Request body not in required format"))
+    }
+  }
 }

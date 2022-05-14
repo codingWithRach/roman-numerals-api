@@ -1,6 +1,6 @@
 package repositories
 
-import models.Conversion
+import models.{Conversion, Roman}
 
 import javax.inject.Singleton
 import scala.collection.mutable
@@ -64,4 +64,10 @@ class RomansRepository {
   }
 
   def getRomans: mutable.Set[Conversion] = newRomans
+
+  def deleteRoman( romanToDelete: Roman ): Option[Conversion] = newRomans.collectFirst {
+    case roman if roman.roman == romanToDelete.roman =>
+      newRomans.remove(roman)
+      roman
+  }
 }
