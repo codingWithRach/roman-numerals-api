@@ -72,7 +72,7 @@ The names of such Romans cannot be duplicated.
 
 ### POST
 
-    /addroman
+    /romans
 
 Expects to receive a request body with content type **application/json** in the following form:
 
@@ -117,7 +117,7 @@ It is possible to update the arabic number corresponding to a Roman that has bee
 
 ### PUT
 
-    /updateroman
+    /romans
 
 Expects to receive a request body with content type **application/json** in the following form:
 
@@ -138,11 +138,11 @@ If successful, a response is returned with content type **application/json** con
 
 ### DELETE (via the endpoint)
 
-    /deleteroman/{name of Roman}
+    /romans/{name of Roman}
 
 ### DELETE (via request body)
 
-    /deleteroman
+    /romans
 
 Expects to receive a request body with content type **application/json** in the following form:
 
