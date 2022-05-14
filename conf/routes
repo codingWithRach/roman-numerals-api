@@ -14,9 +14,9 @@ GET     /toarabic/:roman              controllers.RomansController.convertToArab
 POST    /toroman                      controllers.RomansController.convertBodyToRoman()
 POST    /toarabic                     controllers.RomansController.convertBodyToArabic()
 GET     /romans                       controllers.RomansController.getRomans()
-POST    /addroman                     controllers.RomansController.addRoman()
-PUT     /updateroman                  controllers.RomansController.updateRomanBody()
-DELETE  /deleteroman/:roman           controllers.RomansController.deleteRoman(roman: String)
-DELETE  /deleteroman                  controllers.RomansController.deleteRomanBody()
+POST    /romans                       controllers.RomansController.addRoman()
+PUT     /romans                       controllers.RomansController.updateRomanBody()
+DELETE  /romans/:roman                controllers.RomansController.deleteRoman(roman: String)
+DELETE  /romans                       controllers.RomansController.deleteRomanBody()
 
 

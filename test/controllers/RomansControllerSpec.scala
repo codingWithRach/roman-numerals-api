@@ -161,7 +161,7 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
     "return 201 CREATED for a request to add a new Roman in valid format" in {
       val newRoman: Conversion = Conversion(roman="Caesar", arabic=150344)
       when(mockDataService.addRoman(any())) thenReturn Some(newRoman)
-      val result = controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(newRoman)))
+      val result = controller.addRoman().apply(FakeRequest(POST, "/romans").withJsonBody(Json.toJson(newRoman)))
       status(result) mustBe CREATED
       contentType(result) mustBe Some("application/json")
     }
@@ -171,8 +171,8 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
     "return 400 BAD_REQUEST for a request to add a new Roman who already exists" in {
       val newRoman: Conversion = Conversion(roman="Caesar", arabic=150344)
       when(mockDataService.addRoman(any())) thenReturn None
-      controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(newRoman)))
-      val result = controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(newRoman)))
+      controller.addRoman().apply(FakeRequest(POST, "/romans").withJsonBody(Json.toJson(newRoman)))
+      val result = controller.addRoman().apply(FakeRequest(POST, "/romans").withJsonBody(Json.toJson(newRoman)))
       status(result) mustBe BAD_REQUEST
       contentType(result) mustBe Some("application/json")
       assert(contentAsString(result).contains ("Roman already exists"))
@@ -182,7 +182,7 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
   it should {
     "return 400 BAD_REQUEST for a request to add a new Roman in invalid format" in {
       val newRoman: Roman = Roman("Caesar")
-      val result = controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(newRoman)))
+      val result = controller.addRoman().apply(FakeRequest(POST, "/romans").withJsonBody(Json.toJson(newRoman)))
       status(result) mustBe BAD_REQUEST
       contentType(result) mustBe Some("application/json")
       assert(contentAsString(result).contains ("Request body not in required format"))
@@ -214,8 +214,8 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
     "return 200 OK for a request to delete a Roman that has been added" in {
       val caesar: Conversion = Conversion(roman="Caesar", arabic=150344)
       when(mockDataService.deleteRoman(any())) thenReturn Some(caesar)
-      controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(caesar)))
-      val result = controller.deleteRoman(caesar.roman).apply(FakeRequest(DELETE, "/deleteroman/Caesar"))
+      controller.addRoman().apply(FakeRequest(POST, "/romans").withJsonBody(Json.toJson(caesar)))
+      val result = controller.deleteRoman(caesar.roman).apply(FakeRequest(DELETE, "/romans/Caesar"))
       status(result) mustBe OK
       contentType(result) mustBe Some("application/json")
     }
@@ -224,7 +224,7 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
   it should {
     "return 400 BAD_REQUEST for a request to delete a Roman that has not been added" in {
       when(mockDataService.deleteRoman(any())) thenReturn None
-      val result = controller.deleteRoman("Caesar").apply(FakeRequest(DELETE, "/deleteroman/Caesar"))
+      val result = controller.deleteRoman("Caesar").apply(FakeRequest(DELETE, "/romans/Caesar"))
       status(result) mustBe BAD_REQUEST
       contentType(result) mustBe Some("application/json")
       assert(contentAsString(result).contains ("Roman cannot be found"))
@@ -235,8 +235,8 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
     "return 200 OK for a request to delete a Roman that has been added" in {
       val caesar: Conversion = Conversion(roman="Caesar", arabic=150344)
       when(mockDataService.deleteRoman(any())) thenReturn Some(caesar)
-      controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(caesar)))
-      val result = controller.deleteRomanBody().apply(FakeRequest(DELETE, "/deleteroman").withJsonBody(Json.toJson(Roman(caesar.roman))))
+      controller.addRoman().apply(FakeRequest(POST, "/romans").withJsonBody(Json.toJson(caesar)))
+      val result = controller.deleteRomanBody().apply(FakeRequest(DELETE, "/romans").withJsonBody(Json.toJson(Roman(caesar.roman))))
       status(result) mustBe OK
       contentType(result) mustBe Some("application/json")
     }
@@ -245,7 +245,7 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
   it should {
     "return 400 BAD_REQUEST for a request to delete a Roman that has not been added" in {
       when(mockDataService.deleteRoman(any())) thenReturn None
-      val result = controller.deleteRomanBody().apply(FakeRequest(DELETE, "/deleteroman").withJsonBody(Json.toJson(Roman("Caesar"))))
+      val result = controller.deleteRomanBody().apply(FakeRequest(DELETE, "/romans").withJsonBody(Json.toJson(Roman("Caesar"))))
       status(result) mustBe BAD_REQUEST
       contentType(result) mustBe Some("application/json")
       assert(contentAsString(result).contains ("Roman cannot be found"))
@@ -255,7 +255,7 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
   it should {
     "return 400 BAD_REQUEST for a request to delete a Roman in invalid format" in {
       val invalidRoman: Arabic = Arabic(150344)
-      val result = controller.deleteRomanBody().apply(FakeRequest(DELETE, "/deleteRoman").withJsonBody(Json.toJson(invalidRoman)))
+      val result = controller.deleteRomanBody().apply(FakeRequest(DELETE, "/romans").withJsonBody(Json.toJson(invalidRoman)))
       status(result) mustBe BAD_REQUEST
       contentType(result) mustBe Some("application/json")
       assert(contentAsString(result).contains ("Request body not in required format"))
@@ -267,8 +267,8 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
       val incorrectCaesar: Conversion = Conversion(roman="Caesar", arabic=150341)
       val correctedCaesar: Conversion = Conversion(roman="Caesar", arabic=150344)
       when(mockDataService.updateRoman(any())) thenReturn Some(correctedCaesar)
-      controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(incorrectCaesar)))
-      val result = controller.updateRomanBody().apply(FakeRequest(PUT, "/updateroman").withJsonBody(Json.toJson(correctedCaesar)))
+      controller.addRoman().apply(FakeRequest(POST, "/romans").withJsonBody(Json.toJson(incorrectCaesar)))
+      val result = controller.updateRomanBody().apply(FakeRequest(PUT, "/romans").withJsonBody(Json.toJson(correctedCaesar)))
       status(result) mustBe OK
       contentType(result) mustBe Some("application/json")
     }
@@ -279,8 +279,8 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
       val incorrectCaesar: Conversion = Conversion(roman="Caesar", arabic=150341)
       val correctedCaesar: Conversion = Conversion(roman="caesar", arabic=150344)
       when(mockDataService.updateRoman(any())) thenReturn Some(correctedCaesar)
-      controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(incorrectCaesar)))
-      val result = controller.updateRomanBody().apply(FakeRequest(PUT, "/updateroman").withJsonBody(Json.toJson(correctedCaesar)))
+      controller.addRoman().apply(FakeRequest(POST, "/romans").withJsonBody(Json.toJson(incorrectCaesar)))
+      val result = controller.updateRomanBody().apply(FakeRequest(PUT, "/romans").withJsonBody(Json.toJson(correctedCaesar)))
       status(result) mustBe OK
       contentType(result) mustBe Some("application/json")
     }
@@ -290,7 +290,7 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
     "return 400 BAD_REQUEST for a request to update a Roman that has not been added" in {
       val caesar: Conversion = Conversion(roman="Caesar", arabic=150344)
       when(mockDataService.updateRoman(any())) thenReturn None
-      val result = controller.updateRomanBody().apply(FakeRequest(PUT, "/updateroman").withJsonBody(Json.toJson(caesar)))
+      val result = controller.updateRomanBody().apply(FakeRequest(PUT, "/romans").withJsonBody(Json.toJson(caesar)))
       status(result) mustBe BAD_REQUEST
       contentType(result) mustBe Some("application/json")
       assert(contentAsString(result).contains ("Roman cannot be found"))
@@ -301,8 +301,8 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
     "return 400 BAD_REQUEST for a request to update a Roman in invalid format" in {
       val incorrectCaesar: Conversion = Conversion(roman="Caesar", arabic=150341)
       val correctedCaesar: Roman = Roman("Caesar")
-      controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(incorrectCaesar)))
-      val result = controller.updateRomanBody().apply(FakeRequest(PUT, "/updateroman").withJsonBody(Json.toJson(correctedCaesar)))
+      controller.addRoman().apply(FakeRequest(POST, "/romans").withJsonBody(Json.toJson(incorrectCaesar)))
+      val result = controller.updateRomanBody().apply(FakeRequest(PUT, "/romans").withJsonBody(Json.toJson(correctedCaesar)))
       status(result) mustBe BAD_REQUEST
       contentType(result) mustBe Some("application/json")
       assert(contentAsString(result).contains ("Request body not in required format"))
