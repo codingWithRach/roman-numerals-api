@@ -92,4 +92,32 @@ class RomansRepositorySpec extends AnyFlatSpec with Matchers {
     romanDeleted should be (None)
   }
 
+  "updateRoman" should "return the updated Roman when attempting to update a Roman that exists" in {
+    val dataRepository = new RomansRepository
+    val incorrectCaesar: Conversion = Conversion(roman="Caesar", arabic=150341)
+    val correctedCaesar: Conversion = Conversion(roman="Caesar", arabic=150344)
+    dataRepository.addRoman(incorrectCaesar)
+    val romanUpdated = dataRepository.updateRoman(correctedCaesar)
+    dataRepository.newRomans.size should be (1)
+    romanUpdated should be (Some(correctedCaesar))
+  }
+
+  it should "update the Roman correctly when sent in lowercase" in {
+    val dataRepository = new RomansRepository
+    val incorrectCaesar: Conversion = Conversion(roman="Caesar", arabic=150341)
+    val correctedCaesar: Conversion = Conversion(roman="caesar", arabic=150344)
+    dataRepository.addRoman(incorrectCaesar)
+    val romanUpdated = dataRepository.updateRoman(correctedCaesar)
+    dataRepository.newRomans.size should be (1)
+    romanUpdated should be (Some(Conversion(roman="Caesar", arabic=150344)))
+  }
+
+  it should "return None when attempting to update a Roman that does not exist" in {
+    val dataRepository = new RomansRepository
+    val caesar: Conversion = Conversion(roman="Caesar", arabic=150344)
+    val romanUpdated = dataRepository.updateRoman(caesar)
+    dataRepository.newRomans.size should be (0)
+    romanUpdated should be (None)
+  }
+
 }

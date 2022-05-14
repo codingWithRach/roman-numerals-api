@@ -111,6 +111,29 @@ A response is returned with content type **application/json** containing details
         }
     ]
 
+## Updating an added Roman
+
+It is possible to update the arabic number corresponding to a Roman that has been added.
+
+### PUT
+
+    /updateroman
+
+Expects to receive a request body with content type **application/json** in the following form:
+
+    {
+        "roman": "Caesar"
+        "arabic": 150344
+    }
+
+### Response
+
+If successful, a response is returned with content type **application/json** containing details of the updated Roman:
+
+    {
+        "roman": "Caesar"
+        "arabic": 150344
+    }
 ## Deleting an added Roman
 
 ### DELETE (via the endpoint)

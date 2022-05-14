@@ -99,4 +99,20 @@ class RomansController  @Inject()(val controllerComponents: ControllerComponents
       }
     }
   }
+
+  def updateRomanBody(): Action[AnyContent] = Action {
+    implicit request => {
+      val romanToUpdate: Option[Conversion] = request.body.asJson.flatMap(Json.fromJson[Conversion](_).asOpt)
+      if (romanToUpdate.isEmpty) {
+        BadRequest(Json.toJson("Request body not in required format"))
+      } else {
+        val updatedRoman: Option[Conversion] = dataRepository.updateRoman(romanToUpdate.get)
+        if (updatedRoman.isEmpty) {
+          BadRequest(Json.toJson("Roman cannot be found"))
+        } else {
+          Ok(Json.toJson(updatedRoman))
+        }
+      }
+    }
+  }
 }

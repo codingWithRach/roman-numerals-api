@@ -70,4 +70,16 @@ class RomansRepository {
       newRomans.remove(roman)
       roman
   }
+
+  def updateRoman( romanToUpdate: Conversion ): Option[Conversion] = newRomans.collectFirst {
+    case roman if roman.roman.toLowerCase == romanToUpdate.roman.toLowerCase =>
+      newRomans.remove(roman)
+      // ensure case of original entry is retained
+      val romanToAdd: Conversion = Conversion(roman = roman.roman, arabic = romanToUpdate.arabic)
+      val addedRoman = addRoman(romanToAdd)
+      addedRoman match {
+        case Some(romanToAdd) => romanToAdd
+        case None => emptyConversion
+      }
+  }
 }

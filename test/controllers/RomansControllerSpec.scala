@@ -261,4 +261,51 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
       assert(contentAsString(result).contains ("Request body not in required format"))
     }
   }
+
+  "RomansController PUT updateRomanBody" should {
+    "return 200 OK for a request to update a Roman that has been added" in {
+      val incorrectCaesar: Conversion = Conversion(roman="Caesar", arabic=150341)
+      val correctedCaesar: Conversion = Conversion(roman="Caesar", arabic=150344)
+      when(mockDataService.updateRoman(any())) thenReturn Some(correctedCaesar)
+      controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(incorrectCaesar)))
+      val result = controller.updateRomanBody().apply(FakeRequest(PUT, "/updateroman").withJsonBody(Json.toJson(correctedCaesar)))
+      status(result) mustBe OK
+      contentType(result) mustBe Some("application/json")
+    }
+  }
+
+  it should {
+    "return 200 OK for a request to update a Roman when sent in lowercase" in {
+      val incorrectCaesar: Conversion = Conversion(roman="Caesar", arabic=150341)
+      val correctedCaesar: Conversion = Conversion(roman="caesar", arabic=150344)
+      when(mockDataService.updateRoman(any())) thenReturn Some(correctedCaesar)
+      controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(incorrectCaesar)))
+      val result = controller.updateRomanBody().apply(FakeRequest(PUT, "/updateroman").withJsonBody(Json.toJson(correctedCaesar)))
+      status(result) mustBe OK
+      contentType(result) mustBe Some("application/json")
+    }
+  }
+
+  it should {
+    "return 400 BAD_REQUEST for a request to update a Roman that has not been added" in {
+      val caesar: Conversion = Conversion(roman="Caesar", arabic=150344)
+      when(mockDataService.updateRoman(any())) thenReturn None
+      val result = controller.updateRomanBody().apply(FakeRequest(PUT, "/updateroman").withJsonBody(Json.toJson(caesar)))
+      status(result) mustBe BAD_REQUEST
+      contentType(result) mustBe Some("application/json")
+      assert(contentAsString(result).contains ("Roman cannot be found"))
+    }
+  }
+
+  it should {
+    "return 400 BAD_REQUEST for a request to update a Roman in invalid format" in {
+      val incorrectCaesar: Conversion = Conversion(roman="Caesar", arabic=150341)
+      val correctedCaesar: Roman = Roman("Caesar")
+      controller.addRoman().apply(FakeRequest(POST, "/addRoman").withJsonBody(Json.toJson(incorrectCaesar)))
+      val result = controller.updateRomanBody().apply(FakeRequest(PUT, "/updateroman").withJsonBody(Json.toJson(correctedCaesar)))
+      status(result) mustBe BAD_REQUEST
+      contentType(result) mustBe Some("application/json")
+      assert(contentAsString(result).contains ("Request body not in required format"))
+    }
+  }
 }
