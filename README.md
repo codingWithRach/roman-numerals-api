@@ -14,6 +14,14 @@ Navigate to the project folder and enter the following command in the terminal
 
 The API will be accessible at http://localhost:9000/{endpoint}
 
+## Endpoints and Methods
+
+    /toroman    GET, POST                   Converts a number from Arabic to Roman
+    /toarabic   GET, POST                   Converts a number from roman to Arabic
+    /romans     GET, POST, PUT, DELETE      Allows the storage of additional Romans
+
+See the following sections for further details
+
 ## Converting from Arabic to Roman Numerals
 
 ### GET
