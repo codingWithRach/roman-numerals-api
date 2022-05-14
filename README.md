@@ -90,6 +90,27 @@ If successful, a response is returned with content type **application/json** con
         "arabic": 150344
     }
 
+## Retrieving added Romans
+
+### GET
+
+    /romans
+
+### Response
+
+A response is returned with content type **application/json** containing details of any Romans that have been added:
+
+    [
+        {
+            "arabic": 240141,
+            "roman": "Caligula"
+        },
+        {
+            "arabic": 150344,
+            "roman": "Caesar"
+        }
+    ]
+
 ## Tech Stack
 
 This project was built using the Scala [Play Framework](https://www.playframework.com/) with [Google Guice](https://github.com/google/guice) for dependency injection.

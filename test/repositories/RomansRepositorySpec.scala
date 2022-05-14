@@ -60,4 +60,19 @@ class RomansRepositorySpec extends AnyFlatSpec with Matchers {
     dataRepository.newRomans.size should be (1)
   }
 
+  "getRomans" should "return an empty set when no Romans have been added" in {
+    val dataRepository = new RomansRepository
+    dataRepository.newRomans.size should be (0)
+  }
+
+  it should "return an set of Romans when Romans have been added" in {
+    val caesar: Conversion = Conversion(roman="Caesar", arabic=150344)
+    val caligula: Conversion = Conversion(roman="Caligula", arabic=240141)
+    val dataRepository = new RomansRepository
+    dataRepository.addRoman(caesar)
+    dataRepository.addRoman(caligula)
+    dataRepository.getRomans should be (Set(caesar, caligula))
+    dataRepository.getRomans.size should be (2)
+  }
+
 }

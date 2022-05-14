@@ -65,4 +65,13 @@ class RomansController  @Inject()(val controllerComponents: ControllerComponents
       }
     }
   }
+
+  def getRomans: Action[AnyContent] = Action {
+    val romans = dataRepository.getRomans
+    if (romans.isEmpty) {
+      BadRequest(Json.toJson("No Romans defined"))
+    } else {
+      Ok(Json.toJson(romans))
+    }
+  }
 }

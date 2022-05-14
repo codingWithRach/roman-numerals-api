@@ -62,4 +62,6 @@ class RomansRepository {
       }
     }
   }
+
+  def getRomans: mutable.Set[Conversion] = newRomans
 }

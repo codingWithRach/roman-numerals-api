@@ -11,6 +11,8 @@ import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers.any
 import play.api.libs.json.Json
 
+import scala.collection.mutable
+
 class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Injecting with MockitoSugar {
 
   val mockDataService: RomansRepository = mock[RomansRepository]
@@ -184,6 +186,27 @@ class RomansControllerSpec  extends PlaySpec with GuiceOneAppPerTest with Inject
       status(result) mustBe BAD_REQUEST
       contentType(result) mustBe Some("application/json")
       assert(contentAsString(result).contains ("Request body not in required format"))
+    }
+  }
+
+  "RomansController GET getRomans" should {
+    "return 200 OK for a request to retrieve Romans that have been added" in {
+      val caesar: Conversion = Conversion(roman="Caesar", arabic=150344)
+      val caligula: Conversion = Conversion(roman="Caligula", arabic=240141)
+      when(mockDataService.getRomans) thenReturn mutable.Set(caesar, caligula)
+      val result = controller.getRomans().apply(FakeRequest(GET, "/romans"))
+      status(result) mustBe OK
+      contentType(result) mustBe Some("application/json")
+    }
+  }
+
+  it should {
+    "return 400 BAD_REQUEST for a request to retrieve Romans when none have been added" in {
+      when(mockDataService.getRomans) thenReturn mutable.Set[Conversion]()
+      val result = controller.getRomans().apply(FakeRequest(GET, "/romans"))
+      status(result) mustBe BAD_REQUEST
+      contentType(result) mustBe Some("application/json")
+      assert(contentAsString(result).contains ("No Romans defined"))
     }
   }
 }
