@@ -66,7 +66,7 @@ class RomansRepository {
   def getRomans: mutable.Set[Conversion] = newRomans
 
   def deleteRoman( romanToDelete: Roman ): Option[Conversion] = newRomans.collectFirst {
-    case roman if roman.roman == romanToDelete.roman =>
+    case roman if roman.roman.toLowerCase == romanToDelete.roman.toLowerCase =>
       newRomans.remove(roman)
       roman
   }
