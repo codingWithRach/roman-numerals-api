@@ -1,0 +1,10 @@
+---
+openapi: 3.0.3
+info:
+  title: "Roman Numerals API"
+  description: "Convert numbers between arabic and Roman numerals, or store details of additional Romans"
+  version: "1.0.0"
+consumes:
+  - application/json
+produces:
+  - application/json

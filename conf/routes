@@ -4,19 +4,172 @@
 # ~~~~
 
 # An example controller showing a sample home page
+### NoDocs ###
 GET     /                           controllers.HomeController.index()
 
 # Map static resources from the /public folder to the /assets URL path
+### NoDocs ###
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
+###
+#  summary: Convert a number from arabic to Roman numerals
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/components/schemas/models.Conversion'
+#    400:
+#      description: bad request
+#      schema:
+#        "type" : "string"
+###
 GET     /toroman/:arabic              controllers.RomansController.convertToRoman(arabic: Int)
+
+###
+#  summary: Convert a number from Roman numerals to arabic
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/components/schemas/models.Conversion'
+#    400:
+#      description: bad request
+#      schema:
+#        "type" : "string"
+###
 GET     /toarabic/:roman              controllers.RomansController.convertToArabic(roman: String)
+
+###
+#  summary: Convert a number from arabic to Roman numerals
+#  parameters:
+#    - in: body
+#      name: arabic
+#      description: The arabic number to convert into Roman numerals
+#      schema:
+#        $ref: '#/components/schemas/models.Arabic'
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/components/schemas/models.Conversion'
+#    400:
+#      description: bad request
+#      schema:
+#        "type" : "string"
+###
 POST    /toroman                      controllers.RomansController.convertBodyToRoman()
+
+###
+#  summary: Convert a number from Roman numerals to arabic
+#  parameters:
+#    - in: body
+#      name: roman
+#      description: The Roman numerals to convert to arabic
+#      schema:
+#        $ref: '#/components/schemas/models.Roman'
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/components/schemas/models.Conversion'
+#    400:
+#      description: bad request
+#      schema:
+#        "type" : "string"
+###
 POST    /toarabic                     controllers.RomansController.convertBodyToArabic()
+
+###
+#  summary: Retrieve additional Romans
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/components/schemas/models.Conversion'
+#    400:
+#      description: bad request
+#      schema:
+#        "type" : "string"
+###
 GET     /romans                       controllers.RomansController.getRomans()
+
+###
+#  summary: Create a new Roman
+#  parameters:
+#    - in: body
+#      name: roman
+#      description: The name and number (e.g. year of death) for the Roman
+#      schema:
+#        $ref: '#/components/schemas/models.Conversion'
+#  responses:
+#    201:
+#      description: created
+#      schema:
+#        $ref: '#/components/schemas/models.Conversion'
+#    400:
+#      description: bad request
+#      schema:
+#        "type" : "string"
+###
 POST    /romans                       controllers.RomansController.addRoman()
+
+###
+#  summary: Edit an additional Roman
+#  parameters:
+#    - in: body
+#      name: roman
+#      description: The existing name and new number (e.g. year of death) for the Roman
+#      schema:
+#        $ref: '#/components/schemas/models.Conversion'
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/components/schemas/models.Conversion'
+#    400:
+#      description: bad request
+#      schema:
+#        "type" : "string"
+###
 PUT     /romans                       controllers.RomansController.updateRomanBody()
+
+###
+#  summary: Delete an additional Roman
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/components/schemas/models.Conversion'
+#    400:
+#      description: bad request
+#      schema:
+#        "type" : "string"
+###
 DELETE  /romans/:roman                controllers.RomansController.deleteRoman(roman: String)
+
+###
+#  summary: Delete an additional Roman
+#  parameters:
+#    - in: body
+#      name: roman
+#      description: The name of the Roman being deleted
+#      schema:
+#        $ref: '#/components/schemas/models.Roman'
+#  responses:
+#    200:
+#      description: success
+#      schema:
+#        $ref: '#/components/schemas/models.Conversion'
+#    400:
+#      description: bad request
+#      schema:
+#        "type" : "string"
+###
 DELETE  /romans                       controllers.RomansController.deleteRomanBody()
 
+### NoDocs ###
+GET   /docs/swagger-ui/*file        controllers.Assets.at(path:String="/public/lib/swagger-ui", file:String)
+
+### NoDocs ###
+GET   /assets/*file                 controllers.Assets.versioned(path="/public", file: Asset)
 
