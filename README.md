@@ -142,6 +142,7 @@ If successful, a response is returned with content type **application/json** con
         "roman": "Caesar"
         "arabic": 150344
     }
+
 ## Deleting an added Roman
 
 ### DELETE (via the endpoint)
